@@ -1,9 +1,9 @@
 import { request } from './dataStorage.js';
-import formEventlisteners from './index.js';
+import { addItemToDom, getItemFromDb } from './events.js';
 
 request.onsuccess = () => {
-  formEventlisteners();
-  console.log('ok');
+  addItemToDom();
+  getItemFromDb();
 }
 
 
