@@ -1,7 +1,6 @@
 import { addEntryToDb, getEntryFromDb } from './dataStorage.js';
 
 const formEventlisteners = () => {
-  // const form = document.querySelector('.todo-form');
   const displayModal = (selector, value) => {
     const modal = document.querySelector(selector);
     modal.style.display = value;
@@ -22,7 +21,7 @@ const formEventlisteners = () => {
     });
   };
 
-  const addDeleteItemEventListener = () => {
+  const addDeleteButtonEventListener = () => {
     const deleteButtons = document.querySelectorAll('.delete');
     deleteButtons.forEach( (deleteButton) => {
       deleteButton.addEventListener('click', () => {
@@ -80,75 +79,80 @@ const formEventlisteners = () => {
       });
     })
   }
+
+  markAsCompleteEventListener();
+  addDeleteButtonEventListener();
+  addEditButtonEventListener();
 }
 
-const addItemToDom = (event) => {
-  event.preventDefault();
-  const itemId = 'id' + Math.random().toString(36).substring(7);
-  const deleteModalId = 'id' + Math.random().toString(36).substring(7);
-  const editModalId = 'id' + Math.random().toString(36).substring(7);
-  const titleProperty = JSON.stringify({ itemId, deleteModalId, editModalId });
-  const input = document.querySelector('.input');
-  const allItems = document.querySelector('.all-items');
-  const inputValue = input.value;
+const addItemToDom = () => {
+  const form = document.querySelector('.todo-form');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const itemId = 'id' + Date.parse(new Date()).toString();
+    const deleteModalId = 'id' + Math.random().toString(36).substring(7);
+    const editModalId = 'id' + Math.random().toString(36).substring(7);
+    const titleProperty = JSON.stringify({ itemId, deleteModalId, editModalId });
+    const input = document.querySelector('.input');
+    const allItems = document.querySelector('.all-items');
+    const inputValue = input.value;
 
-  if (inputValue.trim().length >= 4) {
-    const editModal = `
-      <div class="edit-container" id=${editModalId}>
-        <form class="edit-form" title=${titleProperty}>
-          <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
-          <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
-          <button type="submit" class="confirm-editBtn">OK</button>
-        </form>
-      </div>
-    `;
-
-    const deleteModal = `
-      <div class="delete-container" id=${deleteModalId}>
-        <div class="modal-container">
-          <p class="modal-content">ARE YOU SURE?</p>
-          <button type="button" class="confirm button" title=${titleProperty}>YES</button>
-          <button type="button" class="cancel button" title=${titleProperty}>NO</button>
+    if (inputValue.trim().length >= 4) {
+      const editModal = `
+        <div class="edit-container" id=${editModalId}>
+          <form class="edit-form" title=${titleProperty}>
+            <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
+            <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
+            <button type="submit" class="confirm-editBtn">OK</button>
+          </form>
         </div>
-      </div>
-    `;
+      `;
 
-    const itemDiv = `
-      <div class="item-div" id=${itemId}>
-        <span class="item-text ${itemId}">${inputValue}</span>
-        <span class="button-container">
-          <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
-          ${editModal}
-          <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
-          ${deleteModal}
-          <button class="completed button" title=${titleProperty}><i class="fa fa-check"></i></button>
-        </span>
-      </div>
-    `;
+      const deleteModal = `
+        <div class="delete-container" id=${deleteModalId}>
+          <div class="modal-container">
+            <p class="modal-content">ARE YOU SURE?</p>
+            <button type="button" class="confirm button" title=${titleProperty}>YES</button>
+            <button type="button" class="cancel button" title=${titleProperty}>NO</button>
+          </div>
+        </div>
+      `;
 
-    allItems.innerHTML += itemDiv;
-    input.value = '';
+      const itemDiv = `
+        <div class="item-div" id=${itemId}>
+          <span class="item-text ${itemId}">${inputValue}</span>
+          <span class="button-container">
+            <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
+            ${editModal}
+            <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
+            ${deleteModal}
+            <button class="completed button" title=${titleProperty}><i class="fa fa-check"></i></button>
+          </span>
+        </div>
+      `;
 
-    formEventlisteners();
+      allItems.innerHTML += itemDiv;
+      input.value = '';
 
-    const addItemToIndexDb = {
-      itemId: itemId,
-      deleteModalId: deleteModalId,
-      editModalId: editModalId,
-      inputValue: inputValue,
+      formEventlisteners();
+
+      const addItemToIndexDb = {
+        itemId: itemId,
+        deleteModalId: deleteModalId,
+        editModalId: editModalId,
+        inputValue: inputValue,
+      }
+
+      addEntryToDb(addItemToIndexDb);
+    } else {
+      alert('Please enter a valid value.');
     }
-
-    addEntryToDb(addItemToIndexDb);
-    
-  } else {
-    alert('Please enter a valid value.');
-  }
+  })
 }
-// form.addEventListener('submit', addItemToDom);
 
 const getItemFromDb = async () => {
-  const todoList = await getEntryFromDb();
   const allItems = document.querySelector('.all-items');
+  const todoList = await getEntryFromDb();
   const listItems = todoList.reverse().map((listItem) => {
     const titleProperty = JSON.stringify({
       itemId: listItem.itemId,
@@ -193,6 +197,8 @@ const getItemFromDb = async () => {
   });
 
   allItems.innerHTML = listItems.join('');
+
+  formEventlisteners();
 }
 
-export { formEventlisteners, getItemFromDb };
+export { addItemToDom, getItemFromDb };
