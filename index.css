@@ -1,0 +1,199 @@
+body {
+  background-color: #008b8b;
+}
+
+.container {
+  margin: unset;
+  text-align: center;
+}
+
+.todo-form {
+  margin: 2em;
+}
+
+.app-name::before  {
+  font-family: FontAwesome;
+  content: "\f298";
+  display: inline-block;
+  font-size: 25px;
+  margin-right: 20px;
+}
+
+.app-name {
+  font-size: 2.5em;
+}
+
+.input {
+  width: 20em;
+  padding: 10px 20px;
+  margin-top: 30px;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+} 
+
+.input:focus,.modal-input:focus {
+  background-color: #c3f6ff;
+  border: 1.5px solid black;
+}
+
+.button:hover,.edit-modal-button:active,.modal-cancel-button:active  {
+  cursor: pointer;
+}
+
+.button:active,.edit-modal-button:active,.modal-cancel-button:active {
+  background: #bebebe;
+  transform: translateY(4px);
+}
+
+.item-text {
+  color: #fff;
+  font-size: 20px;
+}
+
+.item-div {
+  border-radius: 25px;
+  border: 1.5px solid #970303;
+  width: 20em;
+  margin: auto;
+  margin-top: 10px;
+  height: 20px;
+  padding: 15px 18px;
+}
+
+.button {
+  margin: 2px;
+  width: 3em;
+  padding: 2px;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+}
+
+.button:focus,.edit-modal-button:focus,.modal-cancel-button:focus {
+  border: 1.5px solid black;
+}
+
+.button-container {
+  position: absolute;
+  left: 50%;
+}
+
+.edit-container,.delete-container {
+  display: none;
+  position: fixed; 
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  background-color: rgba(0,0,0,0.4); 
+}
+
+.edit-form {
+  background-color:  rgb(109, 206, 251);
+  border: 1px solid #888;
+  margin: auto;
+  margin-top: 10em;
+  width: 30%; 
+  height: 25%;
+  padding: 30px;
+}
+
+.modal-container {
+  text-align: center;
+  background-color:  rgb(109, 206, 251);
+  border: 1px solid #888;
+  margin: auto;
+  margin-top: 10em;
+  width: 30%; 
+  height: 25%;
+  padding: 30px;
+}
+
+.modal-input {
+  margin-top: 8%;
+  width: 80%;
+  padding: 10px 20px;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+}
+
+.edit-modal-button,.modal-cancel-button {
+  margin-top: 20px;
+  padding: 8px 15px;
+  font-size: 12px;
+  font-weight: bold;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+}
+
+.modal-content {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.confirm {
+  margin: 1px;
+  width: 4.5em;
+  font-weight: bold;
+  padding: 7px;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+}
+
+.cancel {
+  width: 6.5em;
+  font-weight: bold;
+  padding: 7px;
+  border: unset;
+  border-radius: 25px;
+  outline: none;
+}
+
+@media screen and (max-width: 425px) {
+  .input {
+    width: 15em;
+  } 
+
+  .item-div {
+    width: 15em;
+    padding: 12px 14px;
+  }
+
+  .item-text {
+    font-size: 15px;
+    line-height: 1.5em;
+  }
+  
+  .button {
+    margin: 1.5px;
+    width: 2.5em;
+  }
+
+  .edit-form {
+    width: 45%; 
+    height: 20%;
+  }
+
+  .modal-container {
+    width: 45%; 
+    height: 30%;
+    padding: 20px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .input {
+    width: 10em;
+  } 
+
+  .modal-container {
+    width: 55%; 
+    height: 30%;
+    padding: 10px;
+  } 
+}
