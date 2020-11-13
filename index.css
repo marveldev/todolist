@@ -37,13 +37,13 @@ body {
   border: 1.5px solid black;
 }
 
-.button:hover,.edit-modal-button:active,.modal-cancel-button:active  {
-  cursor: pointer;
-}
-
-.button:active,.edit-modal-button:active,.modal-cancel-button:active {
+button:active  {
   background: #bebebe;
   transform: translateY(4px);
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 .item-text {
@@ -70,7 +70,7 @@ body {
   outline: none;
 }
 
-.button:focus,.edit-modal-button:focus,.modal-cancel-button:focus {
+button:focus {
   border: 1.5px solid black;
 }
 
@@ -120,7 +120,7 @@ body {
   outline: none;
 }
 
-.edit-modal-button,.modal-cancel-button {
+.edit-form>button {
   margin-top: 20px;
   padding: 8px 15px;
   font-size: 12px;

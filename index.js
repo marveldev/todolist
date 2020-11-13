@@ -1,217 +1,137 @@
-const input = document.querySelector('.input');
 const form = document.querySelector('.todo-form');
-const allItems = document.querySelector('.all-items');
 
-function displayElement(id) {
-  const element = document.getElementById(id);
-  element.style.display = 'block';
+const displayModal = (selector, value) => {
+  const modal = document.querySelector(selector);
+  modal.style.display = value;
 }
 
-function addCompleteEventListener() {
+const markAsCompleteEventListener = () => {
   const markAsCompleteButtons = document.querySelectorAll('.completed');
   markAsCompleteButtons.forEach( (markAsCompleteButton) => {
-    markAsCompleteButton.addEventListener('click', function() {
-      const modal = markAsCompleteButton.parentElement.parentElement;
-      
-      if (modal.style.backgroundColor == 'rgb(1, 163, 101)') {
-        modal.style.backgroundColor = '#008b8b';
+    markAsCompleteButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(markAsCompleteButton.title)
+      const itemDiv = document.querySelector(`#${elementIds.itemId}`)
+      if (itemDiv.style.backgroundColor == 'rgb(1, 163, 101)') {
+        itemDiv.style.backgroundColor = '#008b8b';
       } else {
-        modal.style.backgroundColor = 'rgb(1, 163, 101)';
+        itemDiv.style.backgroundColor = 'rgb(1, 163, 101)';
       };
     });
   });
 };
 
-function addDeleteButtonEventListener() {
+const addDeleteItemEventListener = () => {
   const deleteButtons = document.querySelectorAll('.delete');
   deleteButtons.forEach( (deleteButton) => {
-    deleteButton.addEventListener('click', function() {
-      const modal = deleteButton.nextElementSibling;
-      modal.style.display = 'block';
+    deleteButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(deleteButton.title)
+      displayModal(`#${elementIds.deleteModalId}`, 'block');
     });
   });
-}
 
-function addCancelButtonEventListener() {
   const cancelButtons = document.querySelectorAll('.cancel');
   cancelButtons.forEach( (cancelButton) => {
-    cancelButton.addEventListener('click', function() {
-      const modal = cancelButton.parentElement.parentElement;
-      modal.style.display = 'none';
-    })
+    cancelButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(cancelButton.title)
+      displayModal(`#${elementIds.deleteModalId}`, 'none');
+    });
   });
-}
 
-// This confirms the deletion of the item from the todo-list. 
-function addConfirmButtonEventListener() {
+  const allItems = document.querySelector('.all-items');
   const confirmButtons = document.querySelectorAll('.confirm');
   confirmButtons.forEach( (confirmButton) => {
-    confirmButton.addEventListener('click', function() {
-      const itemDiv = confirmButton.parentElement.parentElement.parentElement.parentElement;
-      const deleteContainer = confirmButton.parentElement.parentElement;
-      const dataStore = JSON.parse(localStorage.getItem('dataStore'));
-      // deleteContainer.title returns the data index
-      const singleDataIndex = dataStore.findIndex(data => data.index == deleteContainer.title);
-      console.log(dataStore.splice(singleDataIndex, 1))
-      localStorage.setItem('dataStore', JSON.stringify(dataStore));
+    confirmButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(confirmButton.title)
+      const itemDiv = document.querySelector(`#${elementIds.itemId}`)
       allItems.removeChild(itemDiv);
     })
   });
 }
 
-function addEditButtonEventListener() {
+const addEditButtonEventListener = () => {
   const editButtons = document.querySelectorAll('.edit');
   editButtons.forEach( (editButton) => {
-    editButton.addEventListener('click', function() {
-      const editButtonId = editButton.nextElementSibling.id;
-      displayElement(editButtonId);
+    editButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(editButton.title);
+      displayModal(`#${elementIds.editModalId}`, 'block');
     });
   });
-}
 
-function addModalCancelButtonEventListener() {
-  const modalCancelButtons = document.querySelectorAll('.modal-cancel-button');
-  modalCancelButtons.forEach( (modalCancelButton) => {
-    modalCancelButton.addEventListener('click', function() {
-      const modal = modalCancelButton.parentElement.parentElement;
-      modal.style.display = 'none';
+  const cancelButtons = document.querySelectorAll('.cancel-editBtn');
+  cancelButtons.forEach( (cancelButton) => {
+    cancelButton.addEventListener('click', () => {
+      const elementIds = JSON.parse(cancelButton.title);
+      displayModal(`#${elementIds.editModalId}`, 'none');
     })
   });
-} 
 
-function addEditModalFormEventListener() {
-  const modalForms = document.querySelectorAll('.edit-form');
-  modalForms.forEach( (modalForm) => {
-    modalForm.addEventListener('submit', function(event) {
+  const editModalForms = document.querySelectorAll('.edit-form');
+  editModalForms.forEach( (editModalForm) => {
+    editModalForm.addEventListener('submit', (event) => {
       event.preventDefault();
-      const newInputValue = modalForm.firstElementChild.value;
-      const itemTextSpan = modalForm.parentElement.parentElement.parentElement.firstElementChild;
-      itemTextSpan.innerText = newInputValue;
-      
-      const editModal = modalForm.parentElement;
-      const dataStore = JSON.parse(localStorage.getItem('dataStore'));
-      const singleDataIndex = dataStore.findIndex(data => data.index == editModal.id);
-      dataStore[singleDataIndex].inputValue = newInputValue;
-      localStorage.setItem('dataStore', JSON.stringify(dataStore));
+      const elementIds = JSON.parse(editModalForm.title);
+      const editModal = editModalForm.parentElement;
+      const newInputValue = editModalForm.firstElementChild.value;
+      const inputValue = document.querySelector(`.${elementIds.itemId}`)
+      inputValue.innerText = newInputValue;
       editModal.style.display = 'none';
     });
   })
 }
 
-let index = localStorage.getItem('index') || 0;
-
-const dataStore = JSON.parse(localStorage.getItem('dataStore')) || [];
-
-// [{"0":"cooking"},{"1":"to dance"},{"2":"eat chicken"},{"3":"go to market"}]
-
-// [{index: 0, value: "cooking"}, {index: 1, value: "to dance"}, {index: 2, value: "eat chicken"},{index: 3, value: "go to market"}]
-
-dataStore.map(data => {
-  const editModal = `
-    <div class="edit-container" id=${data.index}>
-      <form class="edit-form">
-        <input type="text" class="modal-input" value="${data.inputValue}" placeholder="enter new item here..." />
-        <button type="button" class="modal-cancel-button">CANCEL</button>
-        <button type="submit" class="edit-modal-button">OK</button>
-      </form>
-    </div>
-  `;
-
-  const deleteModal = `
-    <div class="delete-container" title=${data.index}>
-      <div class="modal-container">
-        <p class="modal-content">ARE YOU SURE?</p>
-        <button type="button" class="confirm button">YES</button>
-        <button type="button" class="cancel button">NO</button>
-      </div>
-    </div>
-  `;
-
-  const itemDiv = `
-    <div class="item-div">
-      <span class="item-text">${data.inputValue}</span>
-      <span class="button-container">
-        <button class="edit button"><i class="fa fa-edit"></i></button>
-        ${editModal}
-        <button class="delete button"><i class="fa fa-trash"></i></button>
-        ${deleteModal}
-        <button class="completed button"><i class="fa fa-check"></i></button>
-      </span>
-    </div>
-  `;
-  
-  allItems.innerHTML += itemDiv;
-})
-
-addCompleteEventListener();
-addDeleteButtonEventListener();
-addCancelButtonEventListener();
-addConfirmButtonEventListener();
-addEditButtonEventListener();
-addModalCancelButtonEventListener();
-addEditModalFormEventListener();
-
-function addItemToDom(event) {
+const addItemToDom = (event) => {
   event.preventDefault();
-  if (input.value.trim().length > 4) {
-    const inputValue = input.value.trim();
+  const itemId = 'id' + Math.random().toString(36).substring(7);
+  const deleteModalId = 'id' + Math.random().toString(36).substring(7);
+  const editModalId = 'id' + Math.random().toString(36).substring(7);
 
+  const titleProperty = JSON.stringify({ itemId, deleteModalId, editModalId });
+  
+  const input = document.querySelector('.input');
+  const allItems = document.querySelector('.all-items');
+  const inputValue = input.value;
+
+  if (inputValue.trim().length >= 4) {
     const editModal = `
-      <div class="edit-container" id=${index}>
-      <form class="edit-form">
-      <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
-      <button type="button" class="modal-cancel-button">CANCEL</button>
-      <button type="submit" class="edit-modal-button">OK</button>
-      </form>
+      <div class="edit-container" id=${editModalId}>
+        <form class="edit-form" title=${titleProperty}>
+          <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
+          <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
+          <button type="submit" class="confirm-editBtn">OK</button>
+        </form>
       </div>
     `;
 
     const deleteModal = `
-      <div class="delete-container" title=${index}>
+      <div class="delete-container" id=${deleteModalId}>
         <div class="modal-container">
           <p class="modal-content">ARE YOU SURE?</p>
-          <button type="button" class="confirm-button">YES</button>
-          <button type="button" class="cancel-button">NO</button>
+          <button type="button" class="confirm button" title=${titleProperty}>YES</button>
+          <button type="button" class="cancel button" title=${titleProperty}>NO</button>
         </div>
       </div>
     `;
 
     const itemDiv = `
-      <div class="item-div">
-      <span class="item-text">${inputValue}</span>
-      <span class="button-container">
-      <button class="edit button"><i class="fa fa-edit"></i></button>
-      ${editModal}
-      <button class="delete button"><i class="fa fa-trash"></i></button>
-      ${deleteModal}
-      <button class="completed button"><i class="fa fa-check"></i></button>
-      </span>
+      <div class="item-div" id=${itemId}>
+        <span class="item-text ${itemId}">${inputValue}</span>
+        <span class="button-container">
+          <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
+          ${editModal}
+          <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
+          ${deleteModal}
+          <button class="completed button" title=${titleProperty}><i class="fa fa-check"></i></button>
+        </span>
       </div>
     `;
-    
+
     allItems.innerHTML += itemDiv;
     input.value = '';
-    
+
+    markAsCompleteEventListener();
+    addDeleteItemEventListener();
     addEditButtonEventListener();
-    addModalCancelButtonEventListener();
-    addEditModalFormEventListener();
-    addDeleteButtonEventListener();
-    addCancelButtonEventListener();
-    addConfirmButtonEventListener()
-    addCompleteEventListener();
     
-    const indexValuePair = {
-      index: index,
-      inputValue: inputValue
-    };
-    
-    let dataStore = JSON.parse(localStorage.getItem('dataStore')) || [];
-    
-    dataStore.push(indexValuePair);
-    localStorage.setItem('dataStore', JSON.stringify(dataStore));
-    
-    index++
-    localStorage.setItem('index', index);
   } else {
     alert('Please enter a valid value.');
   }
