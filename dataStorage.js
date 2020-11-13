@@ -31,4 +31,23 @@ const addEntryToDb = (entry) => {
   }
 }
 
-export { request, addEntryToDb };
+const getEntryFromDb = () => {
+  const data = new Promise((resolve, reject) => {
+    const database = request.result
+    const transaction = database.transaction(['todoList']);
+    const store = transaction.objectStore('todoList')
+    const getData = store.getAll();
+
+    getData.onsuccess = () => {
+      resolve(getData.result)
+    }
+
+    getData.onerror = () => {
+      console.log(`error adding to 'item'`)
+      reject(getData.error);
+    }
+  })
+  return Promise.resolve(data);
+}
+
+export { request, addEntryToDb, getEntryFromDb };
