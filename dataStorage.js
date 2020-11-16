@@ -50,4 +50,45 @@ const getEntryFromDb = () => {
   return Promise.resolve(data);
 }
 
-export { request, addEntryToDb, getEntryFromDb };
+const updateEntry = (itemId, newinputValue) => {
+  const database = request.result;
+  const transaction = database.transaction(['todoList'], 'readwrite');
+  const store = transaction.objectStore('todoList');
+  const getData = store.get(itemId);
+
+  getData.onsuccess = () => {
+    const data = getData.result;
+    data.inputValue = newinputValue;
+    store.put(data);
+  }
+
+  getData.onerror = () => {
+    console.log('error accessing getdata');
+  }
+}
+
+const updateBackground = (itemId, newBackgroundColor) => {
+  const database = request.result;
+  const transaction = database.transaction(['todoList'], 'readwrite');
+  const store = transaction.objectStore('todoList');
+  const getData = store.get(itemId);
+
+  getData.onsuccess = () => {
+    const data = getData.result;
+    data.backgroundColor = newBackgroundColor;
+    store.put(data);
+  }
+
+  getData.onerror = () => {
+    console.log('error accessing getdata');
+  }
+}
+
+const deleteEntry = (entryId) => {
+  const database = request.result;
+  const transaction = database.transaction(['todoList'], 'readwrite');
+  const store = transaction.objectStore('todoList');
+  store.delete(entryId)
+}
+
+export { request, addEntryToDb, getEntryFromDb, deleteEntry, updateEntry, updateBackground };
