@@ -16,6 +16,20 @@ request.onerror = () => {
   console.log('request unsuccessful');
 }
 
+const displayMessage = (selector) => {
+  const message = document.querySelector(selector);
+  message.style.display = 'block';
+
+  setTimeout(() => {
+    message.style.display = 'none';
+  }, 4000);
+
+  const messageButton = message.lastElementChild;
+  messageButton.addEventListener('click', () => {
+    message.style.display = 'none';
+  })
+}
+
 const addEntryToDb = (entry) => {
   const database = request.result;
   const transaction = database.transaction(['todoList'], 'readwrite');
@@ -23,7 +37,7 @@ const addEntryToDb = (entry) => {
   store.add(entry);
 
   transaction.oncomplete = () => {
-    alert('success')
+    displayMessage('#entryMessage');
   }
 
   transaction.onerror = () => {
@@ -60,6 +74,7 @@ const updateEntry = (itemId, newinputValue) => {
     const data = getData.result;
     data.inputValue = newinputValue;
     store.put(data);
+    displayMessage('#updateMessage');
   }
 
   getData.onerror = () => {
@@ -91,4 +106,5 @@ const deleteEntry = (entryId) => {
   store.delete(entryId)
 }
 
-export { request, addEntryToDb, getEntryFromDb, deleteEntry, updateEntry, updateBackground };
+export { request, addEntryToDb, getEntryFromDb, deleteEntry,
+updateEntry, updateBackground, displayMessage };
