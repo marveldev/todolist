@@ -8,7 +8,8 @@ body {
 }
 
 .todo-form {
-  margin: 2em;
+  margin: auto;
+  height: 5em;
 }
 
 .app-name::before  {
@@ -37,9 +38,9 @@ body {
   border: 1.5px solid black;
 }
 
-button:active  {
+button:active {
   background: #bebebe;
-  transform: translateY(4px);
+  transform: translateY(2px);
 }
 
 button:hover {
@@ -48,26 +49,28 @@ button:hover {
 
 .item-text {
   color: #fff;
-  font-size: 20px;
+  font-size: 1.2em;
+  margin-left: 0.5em;
+  line-height: 1.5em;
 }
 
 .item-div {
   border-radius: 25px;
   border: 1.5px solid #970303;
   width: 20em;
-  margin: auto;
-  margin-top: 10px;
-  height: 20px;
-  padding: 15px 18px;
+  margin: 10px auto;
+  height: 1.7em;
+  padding: 0.5em 1em 0.8em;
 }
 
 .button {
   margin: 2px;
-  width: 3em;
-  padding: 2px;
+  width: 3.5em;
+  height: 2em;
   border: unset;
   border-radius: 25px;
   outline: none;
+  font-weight: 700;
 }
 
 button:focus {
@@ -87,11 +90,11 @@ button:focus {
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  background-color: rgba(0,0,0,0.4); 
+  background-color: #00000066; 
 }
 
 .edit-form {
-  background-color:  rgb(109, 206, 251);
+  background-color:  #6dcefb;
   border: 1px solid #888;
   margin: auto;
   margin-top: 10em;
@@ -102,7 +105,7 @@ button:focus {
 
 .modal-container {
   text-align: center;
-  background-color:  rgb(109, 206, 251);
+  background-color:  #6dcefb;
   border: 1px solid #888;
   margin: auto;
   margin-top: 10em;
@@ -112,88 +115,137 @@ button:focus {
 }
 
 .modal-input {
-  margin-top: 8%;
+  padding: 12px 20px;
   width: 80%;
-  padding: 10px 20px;
+  height: 1em;
+  margin: 2em 1em 2em 1.5em;
   border: unset;
   border-radius: 25px;
   outline: none;
 }
 
+#modalInput {
+  height: 5em;
+  margin-bottom: 1em;
+}
+
 .edit-form>button {
-  margin-top: 20px;
-  padding: 8px 15px;
-  font-size: 12px;
-  font-weight: bold;
+  height: 2.2em;
+  font-weight: 700;
   border: unset;
   border-radius: 25px;
   outline: none;
+}
+
+.cancel-editBtn {
+  margin-left: 8em;
+  width: 7em;
+}
+
+.confirm-editBtn {
+  width: 4em;
+  margin-left: 1.2em;
 }
 
 .modal-content {
   font-size: 25px;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .confirm {
   margin: 1px;
   width: 4.5em;
-  font-weight: bold;
-  padding: 7px;
-  border: unset;
-  border-radius: 25px;
-  outline: none;
 }
 
 .cancel {
-  width: 6.5em;
-  font-weight: bold;
-  padding: 7px;
+  width: 4.5em;
+}
+
+.message {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  height: 2em;
+  width: 30%;
+  padding: 1em;
+  color: #000;
+  text-align: center;
+  animation-name: slide;
+  animation-duration: 1s;
+  background-color: #8ED0F9;
+  z-index: 1;
+}
+
+@keyframes slide {
+  from {top: -300px; opacity: 0}
+  to {top: 0; opacity: 1}
+}
+
+.message>strong {
+  font-size: 1.2em;
+  margin-right: 1em;
+}
+
+.message-btn {
   border: unset;
-  border-radius: 25px;
-  outline: none;
+  border-radius: 1.8em;
+  font-weight: 700;
+  width: 4em;
+  height: 2em;
 }
 
 @media screen and (max-width: 425px) {
-  .input {
-    width: 15em;
-  } 
-
-  .item-div {
-    width: 15em;
-    padding: 12px 14px;
+  .modal-input {
+    margin: 2em 1em 2em 0.8em;
   }
 
-  .item-text {
-    font-size: 15px;
-    line-height: 1.5em;
+  .cancel-editBtn {
+    margin-left: 1em;
   }
-  
-  .button {
-    margin: 1.5px;
-    width: 2.5em;
+
+  .confirm-editBtn {
+    margin-left: 9em;
   }
 
   .edit-form {
-    width: 45%; 
-    height: 20%;
+    width: 70%; 
+    height: 25%;
   }
 
   .modal-container {
-    width: 45%; 
-    height: 30%;
+    width: 70%; 
+    height: 25%;
     padding: 20px;
+  }
+
+  .message {
+    width: 100%;
+  }
+
+  .message>strong {
+    margin-right: 0.2em;
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 375px) and (min-width: 320px) {
   .input {
-    width: 10em;
+    width: 90%;
   } 
 
-  .modal-container {
-    width: 55%; 
-    height: 30%;
-    padding: 10px;
-  } 
+  .todo-form {
+    height: 8em;
+  }
+
+  .todo-form>button {
+    display: block;
+    margin: 1em 0 0 auto;
+    width: 5em;
+  }
+
+  .confirm-editBtn {
+    margin-left: 7em;
+  }
 }
