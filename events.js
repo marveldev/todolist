@@ -1,4 +1,4 @@
-import { addEntryToDb, deleteEntry, getEntryFromDb, updateEntry, updateBackground }
+import { addEntryToDb, deleteEntry, getEntryFromDb, updateEntry, updateBackground, displayMessage }
 from './dataStorage.js';
 
 const formEventlisteners = () => {
@@ -76,7 +76,8 @@ const formEventlisteners = () => {
         event.preventDefault();
         const elementIds = JSON.parse(editModalForm.title);
         const editModal = editModalForm.parentElement;
-        const newInputValue = editModalForm.firstElementChild.value;
+        const input = document.querySelector(`.${elementIds.editModalId}`)
+        const newInputValue = input.value;
         const inputValue = document.querySelector(`.${elementIds.itemId}`)
         inputValue.innerText = newInputValue;
         editModal.style.display = 'none';
@@ -106,8 +107,10 @@ const addItemToDom = () => {
       const editModal = `
         <div class="edit-container" id=${editModalId}>
           <form class="edit-form" title=${titleProperty}>
-            <input type="text" class="modal-input" value="${inputValue}"
-            placeholder="enter new item here..." />
+            <div id="modalInput">
+              <input type="text" class="modal-input ${editModalId}" value="${inputValue}"
+              placeholder="enter new item here..." />
+            </div>
             <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
             <button type="submit" class="confirm-editBtn">OK</button>
           </form>
@@ -153,10 +156,9 @@ const addItemToDom = () => {
         inputValue: inputValue,
         backgroundColor: '#008b8b'
       }
-
       addEntryToDb(addItemToIndexDb);
     } else {
-      alert('Please enter a valid value.');
+      displayMessage('#inputMessage');
     }
   })
 }
@@ -176,8 +178,10 @@ const getItemFromDb = async () => {
     const editModal = `
       <div class="edit-container" id=${editModalId}>
         <form class="edit-form" title=${titleProperty}>
-          <input type="text" class="modal-input" value="${inputValue}"
-          placeholder="enter new item here..." />
+          <div id="modalInput">
+            <input type="text" class="modal-input ${editModalId}" value="${inputValue}"
+            placeholder="enter new item here..." />
+          </div>
           <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
           <button type="submit" class="confirm-editBtn">OK</button>
         </form>
