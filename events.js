@@ -1,4 +1,5 @@
-import { addEntryToDb, getEntryFromDb } from './dataStorage.js';
+import { addEntryToDb, deleteEntry, getEntryFromDb, updateEntry, updateBackground }
+from './dataStorage.js';
 
 const formEventlisteners = () => {
   const displayModal = (selector, value) => {
@@ -14,8 +15,10 @@ const formEventlisteners = () => {
         const itemDiv = document.querySelector(`#${elementIds.itemId}`)
         if (itemDiv.style.backgroundColor == 'rgb(1, 163, 101)') {
           itemDiv.style.backgroundColor = '#008b8b';
+          updateBackground(elementIds.itemId, '#008b8b');
         } else {
           itemDiv.style.backgroundColor = 'rgb(1, 163, 101)';
+          updateBackground(elementIds.itemId, 'rgb(1, 163, 101)');
         };
       });
     });
@@ -45,6 +48,7 @@ const formEventlisteners = () => {
         const elementIds = JSON.parse(confirmButton.title)
         const itemDiv = document.querySelector(`#${elementIds.itemId}`)
         allItems.removeChild(itemDiv);
+        deleteEntry(elementIds.itemId)
       })
     });
   }
@@ -76,6 +80,7 @@ const formEventlisteners = () => {
         const inputValue = document.querySelector(`.${elementIds.itemId}`)
         inputValue.innerText = newInputValue;
         editModal.style.display = 'none';
+        updateEntry(elementIds.itemId, newInputValue);
       });
     })
   }
@@ -101,7 +106,8 @@ const addItemToDom = () => {
       const editModal = `
         <div class="edit-container" id=${editModalId}>
           <form class="edit-form" title=${titleProperty}>
-            <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
+            <input type="text" class="modal-input" value="${inputValue}"
+            placeholder="enter new item here..." />
             <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
             <button type="submit" class="confirm-editBtn">OK</button>
           </form>
@@ -118,20 +124,24 @@ const addItemToDom = () => {
         </div>
       `;
 
-      const itemDiv = `
+      let itemDiv = `
         <div class="item-div" id=${itemId}>
           <span class="item-text ${itemId}">${inputValue}</span>
           <span class="button-container">
-            <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
+            <button class="edit button" title=${titleProperty}>
+            <i class="fa fa-edit"></i></button>
             ${editModal}
-            <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
+            <button class="delete button" title=${titleProperty}>
+            <i class="fa fa-trash"></i></button>
             ${deleteModal}
-            <button class="completed button" title=${titleProperty}><i class="fa fa-check"></i></button>
+            <button class="completed button" title=${titleProperty}>
+            <i class="fa fa-check"></i></button>
           </span>
         </div>
       `;
 
-      allItems.innerHTML += itemDiv;
+      itemDiv += allItems.innerHTML;
+      allItems.innerHTML = itemDiv;
       input.value = '';
 
       formEventlisteners();
@@ -141,6 +151,7 @@ const addItemToDom = () => {
         deleteModalId: deleteModalId,
         editModalId: editModalId,
         inputValue: inputValue,
+        backgroundColor: '#008b8b'
       }
 
       addEntryToDb(addItemToIndexDb);
@@ -160,12 +171,13 @@ const getItemFromDb = async () => {
       editModalId: listItem.editModalId
     });
 
-    const { itemId, editModalId, deleteModalId, inputValue } = listItem;
+    const { itemId, editModalId, deleteModalId, inputValue, backgroundColor } = listItem;
 
     const editModal = `
       <div class="edit-container" id=${editModalId}>
         <form class="edit-form" title=${titleProperty}>
-          <input type="text" class="modal-input" value="${inputValue}" placeholder="enter new item here..." />
+          <input type="text" class="modal-input" value="${inputValue}"
+          placeholder="enter new item here..." />
           <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
           <button type="submit" class="confirm-editBtn">OK</button>
         </form>
@@ -183,14 +195,15 @@ const getItemFromDb = async () => {
     `;
 
     return `
-      <div class="item-div" id=${itemId}>
+      <div class="item-div" id=${itemId} style="background-color: ${backgroundColor}">
         <span class="item-text ${itemId}">${inputValue}</span>
         <span class="button-container">
           <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
           ${editModal}
           <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
           ${deleteModal}
-          <button class="completed button" title=${titleProperty}><i class="fa fa-check"></i></button>
+          <button class="completed button" title=${titleProperty}>
+          <i class="fa fa-check"></i></button>
         </span>
       </div>
     `
