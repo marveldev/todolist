@@ -5,5 +5,3 @@ request.onsuccess = () => {
   addItemToDom();
   getItemFromDb();
 }
-
-
