@@ -75,13 +75,17 @@ const formEventlisteners = () => {
       editModalForm.addEventListener('submit', (event) => {
         event.preventDefault();
         const elementIds = JSON.parse(editModalForm.title);
-        const editModal = editModalForm.parentElement;
-        const input = document.querySelector(`.${elementIds.editModalId}`)
-        const newInputValue = input.value;
-        const inputValue = document.querySelector(`.${elementIds.itemId}`)
-        inputValue.innerText = newInputValue;
-        editModal.style.display = 'none';
-        updateEntry(elementIds.itemId, newInputValue);
+        const newInput = document.querySelector(`.${elementIds.editModalId}`);
+        const newInputValue = newInput.value;
+        if (newInputValue.trim().length >= 4) {
+          const editModal = editModalForm.parentElement;
+          const inputValue = document.querySelector(`.${elementIds.itemId}`);
+          inputValue.innerText = newInputValue;
+          editModal.style.display = 'none';
+          updateEntry(elementIds.itemId, newInputValue);
+        } else {
+          displayMessage('#inputMessage');
+        }
       });
     })
   }
@@ -89,6 +93,12 @@ const formEventlisteners = () => {
   markAsCompleteEventListener();
   addDeleteButtonEventListener();
   addEditButtonEventListener();
+
+  document.querySelector('.input').addEventListener('keydown', () => {
+    console.log('ok');
+    document.querySelector('.input').style.height = "1px";
+    document.querySelector('.input').style.height = (3+document.querySelector('.input').scrollHeight)+"px";
+  })
 }
 
 const addItemToDom = () => {
@@ -107,20 +117,20 @@ const addItemToDom = () => {
       const editModal = `
         <div class="edit-container" id=${editModalId}>
           <form class="edit-form" title=${titleProperty}>
-            <div id="modalInput">
-              <input type="text" class="modal-input ${editModalId}" value="${inputValue}"
-              placeholder="enter new item here..." />
+            <input type="text" class="edit-input ${editModalId}" value="${inputValue}"
+            placeholder="enter new item here..." />
+            <div>
+              <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
+              <button type="submit" class="confirm-editBtn">OK</button>
             </div>
-            <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
-            <button type="submit" class="confirm-editBtn">OK</button>
           </form>
         </div>
       `;
 
       const deleteModal = `
         <div class="delete-container" id=${deleteModalId}>
-          <div class="modal-container">
-            <p class="modal-content">ARE YOU SURE?</p>
+          <div class="delete-modal">
+            <p>ARE YOU SURE?</p>
             <button type="button" class="confirm button" title=${titleProperty}>YES</button>
             <button type="button" class="cancel button" title=${titleProperty}>NO</button>
           </div>
