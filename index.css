@@ -24,13 +24,9 @@ body {
   font-size: 2.5em;
 }
 
-.input::placeholder {
-  font-size: 0.8em;
-}
-
 .input {
-  font-size: 1.2em;
-  width: 20em;
+  font-size: 1.1em;
+  width: 22em;
   padding: 1em 1.5em 0 1.5em;
   border-radius: 2em;
   outline: none;
@@ -53,20 +49,48 @@ button:hover {
 }
 
 .item-text {
-  position: absolute;
-  width: 8em;
+  display: inline-block;
   color: #fff;
   font-size: 1.2em;
-  line-height: 1.5em;
+  line-height: 1.7em;
   text-overflow: ellipsis;
   overflow: hidden;
+  width: 8em;
+}
+
+.overflow-text {
+  display: none;
+  position: absolute;
+  left: 38%;
+  width: 20em;
+  z-index: 1;
+  height: auto;
+  background-color: #000000ec;
+  color: #fff;
+  margin: 0.4em auto;
+  padding: 0 1em 1em 1em;
+  border-radius: 0.5em;
+}
+
+.item-container {
+  margin-bottom: 1em;
+}
+
+.arrow-up {
+  position: relative;
+  bottom: 1em;
+  width: 0;
+  height: 0;
+  border-left: 1em solid transparent;
+  border-right: 1em solid transparent;
+  border-bottom: 1em solid #000000ec;
 }
 
 .item-div {
   border-radius: 1.5em;
   border: 0.1em solid #970303;
   width: 20em;
-  margin: 1em auto;
+  margin: 0 auto;
   height: 1.7em;
   padding: 0.5em 1em 0.8em;
 }
@@ -124,7 +148,7 @@ button:focus {
 .delete-modal {
   text-align: center;
   background-color:  #3abecf;
-  border: 1px solid #888;
+  border: 0.1em solid #888;
   margin: 12em auto;
   width: 30%; 
   height: 25%;
