@@ -99,6 +99,18 @@ const formEventlisteners = () => {
     document.querySelector('.input').style.height = "1px";
     document.querySelector('.input').style.height = (3+document.querySelector('.input').scrollHeight)+"px";
   })
+
+  const itemTexts = document.querySelectorAll('.item-text')
+  for (let index = 0; index < itemTexts.length; index++) {
+    const itemText = itemTexts[index];
+    itemText.addEventListener('mouseover', () => {
+      itemText.parentElement.nextElementSibling.style.display = 'block';
+    })
+
+    itemText.addEventListener('mouseout', () => {
+      itemText.parentElement.nextElementSibling.style.display = 'none';
+    })
+  }
 }
 
 const addItemToDom = () => {
@@ -138,20 +150,24 @@ const addItemToDom = () => {
       `;
 
       let itemDiv = `
-        <div class="item-div" id=${itemId}>
-          <div class="item-text ${itemId}">${inputValue}
-            <span class="overflow-text">hello</span>
+        <div class="item-container">
+          <div class="item-div" id=${itemId}>
+            <span class="item-text ${itemId}">${inputValue}</span>
+            <span class="button-container">
+              <button class="edit button" title=${titleProperty}>
+              <i class="fa fa-edit"></i></button>
+              ${editModal}
+              <button class="delete button" title=${titleProperty}>
+              <i class="fa fa-trash"></i></button>
+              ${deleteModal}
+              <button class="completed button" title=${titleProperty}>
+              <i class="fa fa-check"></i></button>
+            </span>
           </div>
-          <span class="button-container">
-            <button class="edit button" title=${titleProperty}>
-            <i class="fa fa-edit"></i></button>
-            ${editModal}
-            <button class="delete button" title=${titleProperty}>
-            <i class="fa fa-trash"></i></button>
-            ${deleteModal}
-            <button class="completed button" title=${titleProperty}>
-            <i class="fa fa-check"></i></button>
-          </span>
+          <div class="overflow-text">
+            <span class="">${inputValue}</span>
+            <div class="arrow-down"></div>
+          </div>
         </div>
       `;
 
@@ -211,16 +227,22 @@ const getItemFromDb = async () => {
     `;
 
     return `
-      <div class="item-div" id=${itemId} style="background-color: ${backgroundColor}">
-        <span class="item-text ${itemId}">${inputValue}</span>
-        <span class="button-container">
-          <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
-          ${editModal}
-          <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
-          ${deleteModal}
-          <button class="completed button" title=${titleProperty}>
-          <i class="fa fa-check"></i></button>
-        </span>
+      <div class="item-container">
+        <div class="item-div" id=${itemId} style="background-color: ${backgroundColor}">
+          <span class="item-text ${itemId}">${inputValue}</span>
+          <span class="button-container">
+            <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
+            ${editModal}
+            <button class="delete button" title=${titleProperty}><i class="fa fa-trash"></i></button>
+            ${deleteModal}
+            <button class="completed button" title=${titleProperty}>
+            <i class="fa fa-check"></i></button>
+          </span>
+        </div>
+        <div class="overflow-text">
+          <div class="arrow-up"></div>
+          <span class="">${inputValue}</span>
+        </div>
       </div>
     `
   });
