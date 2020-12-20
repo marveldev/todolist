@@ -139,7 +139,9 @@ const addItemToDom = () => {
 
       let itemDiv = `
         <div class="item-div" id=${itemId}>
-          <span class="item-text ${itemId}">${inputValue}</span>
+          <div class="item-text ${itemId}">${inputValue}
+            <span class="overflow-text">hello</span>
+          </div>
           <span class="button-container">
             <button class="edit button" title=${titleProperty}>
             <i class="fa fa-edit"></i></button>
