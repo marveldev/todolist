@@ -3,39 +3,44 @@ body {
 }
 
 .container {
-  margin: unset;
   text-align: center;
+  margin-bottom: 5em;
 }
 
 .todo-form {
   margin: auto;
-  height: 5em;
+  height: auto;
 }
 
 .app-name::before  {
   font-family: FontAwesome;
   content: "\f298";
   display: inline-block;
-  font-size: 25px;
-  margin-right: 20px;
+  font-size: 1em;
+  margin-right: 0.5em;
 }
 
 .app-name {
   font-size: 2.5em;
 }
 
+.input::placeholder {
+  font-size: 0.8em;
+}
+
 .input {
+  font-size: 1.2em;
   width: 20em;
-  padding: 10px 20px;
-  margin-top: 30px;
-  border: unset;
-  border-radius: 25px;
+  padding: 1em 1.5em 0 1.5em;
+  border-radius: 2em;
   outline: none;
+  overflow: hidden;
+  resize: none;
 } 
 
-.input:focus,.modal-input:focus {
+.input:focus,.edit-input:focus {
+  border: 0.1em solid black;
   background-color: #c3f6ff;
-  border: 1.5px solid black;
 }
 
 button:active {
@@ -48,27 +53,42 @@ button:hover {
 }
 
 .item-text {
+  position: absolute;
+  width: 8em;
   color: #fff;
   font-size: 1.2em;
-  margin-left: 0.5em;
   line-height: 1.5em;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .item-div {
-  border-radius: 25px;
-  border: 1.5px solid #970303;
+  border-radius: 1.5em;
+  border: 0.1em solid #970303;
   width: 20em;
-  margin: 10px auto;
+  margin: 1em auto;
   height: 1.7em;
   padding: 0.5em 1em 0.8em;
 }
 
+.submit-button {
+  display: block;
+  float: right;
+  margin: 1em 37em;
+  width: 10%;
+  height: 2em;
+  border: unset;
+  border-radius: 0.5em;
+  outline: none;
+  font-weight: 700;
+}
+
 .button {
-  margin: 2px;
+  margin: 0.1em;
   width: 3.5em;
   height: 2em;
   border: unset;
-  border-radius: 25px;
+  border-radius: 1.5em;
   outline: none;
   font-weight: 700;
 }
@@ -84,81 +104,69 @@ button:focus {
 
 .edit-container,.delete-container {
   display: none;
-  position: fixed; 
-  z-index: 1; /* Sit on top */
+  position: fixed;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  background-color: #00000066; 
+  width: 100%;
+  height: 100%;
+  background-color: #00000066;
 }
 
 .edit-form {
-  background-color:  #6dcefb;
-  border: 1px solid #888;
-  margin: auto;
-  margin-top: 10em;
-  width: 30%; 
+  background-color:  #3abecf;
+  border: 0.1em solid #888;
+  margin: 12em auto;
+  width: 30%;
   height: 25%;
-  padding: 30px;
+  padding: 1em;
 }
 
-.modal-container {
+.delete-modal {
   text-align: center;
-  background-color:  #6dcefb;
+  background-color:  #3abecf;
   border: 1px solid #888;
-  margin: auto;
-  margin-top: 10em;
+  margin: 12em auto;
   width: 30%; 
   height: 25%;
-  padding: 30px;
+  padding: 1em;
 }
 
-.modal-input {
-  padding: 12px 20px;
+.edit-input {
+  padding: 1em 1.5em;
   width: 80%;
   height: 1em;
   margin: 2em 1em 2em 1.5em;
   border: unset;
-  border-radius: 25px;
+  border-radius: 1.5em;
   outline: none;
 }
 
-#modalInput {
-  height: 5em;
-  margin-bottom: 1em;
-}
-
-.edit-form>button {
+.edit-form button {
   height: 2.2em;
   font-weight: 700;
   border: unset;
-  border-radius: 25px;
+  border-radius: 1.5em;
   outline: none;
+  padding: 0 1.5em;
 }
 
-.cancel-editBtn {
-  margin-left: 8em;
-  width: 7em;
+.edit-form > div {
+  margin: 0 1em;
 }
 
 .confirm-editBtn {
-  width: 4em;
-  margin-left: 1.2em;
+  float: right;
 }
 
-.modal-content {
-  font-size: 25px;
+.delete-modal > p {
+  font-size: 1.5em;
   font-weight: 700;
+  margin-top: 1.5em;
 }
 
-.confirm {
-  margin: 1px;
+.delete-modal > button {
   width: 4.5em;
-}
-
-.cancel {
-  width: 4.5em;
+  margin: 0 0.5em;
 }
 
 .message {
@@ -184,7 +192,7 @@ button:focus {
   to {top: 0; opacity: 1}
 }
 
-.message>strong {
+.message > strong {
   font-size: 1.2em;
   margin-right: 1em;
 }
