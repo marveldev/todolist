@@ -2,6 +2,12 @@ import { addEntryToDb, deleteEntry, getEntryFromDb, updateEntry, updateBackgroun
 from './dataStorage.js';
 
 const formEventlisteners = () => {
+  const textInput = document.querySelector('.input');
+  textInput.addEventListener('keydown', () => {
+    textInput.style.height = "1px";
+    textInput.style.height = (3+textInput.scrollHeight)+"px";
+  })
+
   const displayModal = (selector, value) => {
     const modal = document.querySelector(selector);
     modal.style.display = value;
@@ -12,7 +18,7 @@ const formEventlisteners = () => {
     markAsCompleteButtons.forEach( (markAsCompleteButton) => {
       markAsCompleteButton.addEventListener('click', () => {
         const elementIds = JSON.parse(markAsCompleteButton.title)
-        const itemDiv = document.querySelector(`#${elementIds.itemId}`)
+        const itemDiv = document.querySelector(`.${elementIds.itemId}`)
         if (itemDiv.style.backgroundColor == 'rgb(1, 163, 101)') {
           itemDiv.style.backgroundColor = '#008b8b';
           updateBackground(elementIds.itemId, '#008b8b');
@@ -79,10 +85,13 @@ const formEventlisteners = () => {
         const newInputValue = newInput.value;
         if (newInputValue.trim().length >= 4) {
           const editModal = editModalForm.parentElement;
-          const inputValue = document.querySelector(`.${elementIds.itemId}`);
-          inputValue.innerText = newInputValue;
-          editModal.style.display = 'none';
-          updateEntry(elementIds.itemId, newInputValue);
+          const inputValues = document.querySelectorAll(`span[property=${elementIds.itemId}]`);
+          for (let index = 0; index < inputValues.length; index++) {
+            const inputValue = inputValues[index];
+            inputValue.innerText = newInputValue;
+            editModal.style.display = 'none';
+            updateEntry(elementIds.itemId, newInputValue);
+          }
         } else {
           displayMessage('#inputMessage');
         }
@@ -93,12 +102,6 @@ const formEventlisteners = () => {
   markAsCompleteEventListener();
   addDeleteButtonEventListener();
   addEditButtonEventListener();
-
-  document.querySelector('.input').addEventListener('keydown', () => {
-    console.log('ok');
-    document.querySelector('.input').style.height = "1px";
-    document.querySelector('.input').style.height = (3+document.querySelector('.input').scrollHeight)+"px";
-  })
 
   const itemTexts = document.querySelectorAll('.item-text')
   for (let index = 0; index < itemTexts.length; index++) {
@@ -130,7 +133,7 @@ const addItemToDom = () => {
         <div class="edit-container" id=${editModalId}>
           <form class="edit-form" title=${titleProperty}>
             <input type="text" class="edit-input ${editModalId}" value="${inputValue}"
-            placeholder="enter new item here..." />
+              placeholder="enter new item here..." />
             <div>
               <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
               <button type="submit" class="confirm-editBtn">OK</button>
@@ -150,9 +153,9 @@ const addItemToDom = () => {
       `;
 
       let itemDiv = `
-        <div class="item-container">
-          <div class="item-div" id=${itemId}>
-            <span class="item-text ${itemId}">${inputValue}</span>
+        <div class="item-container" id=${itemId}>
+          <div class="item-div ${itemId}">
+            <span class="item-text" property=${itemId}>${inputValue}</span>
             <span class="button-container">
               <button class="edit button" title=${titleProperty}>
               <i class="fa fa-edit"></i></button>
@@ -165,8 +168,8 @@ const addItemToDom = () => {
             </span>
           </div>
           <div class="overflow-text">
-            <span class="">${inputValue}</span>
-            <div class="arrow-down"></div>
+            <div class="arrow-up"></div>
+            <span property=${itemId}>${inputValue}</span>
           </div>
         </div>
       `;
@@ -174,6 +177,7 @@ const addItemToDom = () => {
       itemDiv += allItems.innerHTML;
       allItems.innerHTML = itemDiv;
       input.value = '';
+      input.style.height = '';
 
       formEventlisteners();
 
@@ -206,20 +210,20 @@ const getItemFromDb = async () => {
     const editModal = `
       <div class="edit-container" id=${editModalId}>
         <form class="edit-form" title=${titleProperty}>
-          <div id="modalInput">
-            <input type="text" class="modal-input ${editModalId}" value="${inputValue}"
+          <input type="text" class="edit-input ${editModalId}" value="${inputValue}"
             placeholder="enter new item here..." />
+          <div>
+            <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
+            <button type="submit" class="confirm-editBtn">OK</button>
           </div>
-          <button type="button" class="cancel-editBtn" title=${titleProperty}>CANCEL</button>
-          <button type="submit" class="confirm-editBtn">OK</button>
         </form>
       </div>
     `;
 
     const deleteModal = `
       <div class="delete-container" id=${deleteModalId}>
-        <div class="modal-container">
-          <p class="modal-content">ARE YOU SURE?</p>
+        <div class="delete-modal">
+          <p>ARE YOU SURE?</p>
           <button type="button" class="confirm button" title=${titleProperty}>YES</button>
           <button type="button" class="cancel button" title=${titleProperty}>NO</button>
         </div>
@@ -227,9 +231,9 @@ const getItemFromDb = async () => {
     `;
 
     return `
-      <div class="item-container">
-        <div class="item-div" id=${itemId} style="background-color: ${backgroundColor}">
-          <span class="item-text ${itemId}">${inputValue}</span>
+      <div class="item-container" id=${itemId}>
+        <div class="item-div ${itemId}" style="background-color: ${backgroundColor}">
+          <span class="item-text" property=${itemId}>${inputValue}</span>
           <span class="button-container">
             <button class="edit button" title=${titleProperty}><i class="fa fa-edit"></i></button>
             ${editModal}
@@ -241,7 +245,7 @@ const getItemFromDb = async () => {
         </div>
         <div class="overflow-text">
           <div class="arrow-up"></div>
-          <span class="">${inputValue}</span>
+          <span property=${itemId}>${inputValue}</span>
         </div>
       </div>
     `
